@@ -1,0 +1,101 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-gray-50 text-gray-900 min-h-screen;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-white rounded-xl shadow-sm border border-gray-200 p-5 transition-shadow hover:shadow-md;
+  }
+  .card-point {
+    @apply card border-l-4 border-l-point-500;
+  }
+  .card-line {
+    @apply card border-l-4 border-l-line-500;
+  }
+  .btn-primary {
+    @apply inline-flex items-center gap-2 px-4 py-2 bg-gray-900 text-white rounded-lg 
+           hover:bg-gray-800 transition-colors text-sm font-medium disabled:opacity-50;
+  }
+  .btn-secondary {
+    @apply inline-flex items-center gap-2 px-4 py-2 bg-white text-gray-700 border border-gray-300 
+           rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium;
+  }
+  .btn-point {
+    @apply inline-flex items-center gap-2 px-4 py-2 bg-point-600 text-white rounded-lg 
+           hover:bg-point-700 transition-colors text-sm font-medium;
+  }
+  .btn-line {
+    @apply inline-flex items-center gap-2 px-4 py-2 bg-line-600 text-white rounded-lg 
+           hover:bg-line-700 transition-colors text-sm font-medium;
+  }
+  .input {
+    @apply w-full px-3 py-2 border border-gray-300 rounded-lg text-sm 
+           focus:ring-2 focus:ring-point-500 focus:border-point-500 outline-none transition-all;
+  }
+  .textarea {
+    @apply input resize-y min-h-[80px];
+  }
+  .label {
+    @apply block text-sm font-medium text-gray-700 mb-1;
+  }
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+  .badge-point {
+    @apply badge bg-point-100 text-point-700;
+  }
+  .badge-line {
+    @apply badge bg-line-100 text-line-700;
+  }
+  .badge-error-perceptual {
+    @apply badge bg-amber-100 text-amber-800;
+  }
+  .badge-error-tool {
+    @apply badge bg-red-100 text-red-800;
+  }
+  .badge-error-abstraction {
+    @apply badge bg-violet-100 text-violet-800;
+  }
+  .badge-error-transmission {
+    @apply badge bg-cyan-100 text-cyan-800;
+  }
+  .badge-error-cognitive {
+    @apply badge bg-pink-100 text-pink-800;
+  }
+  .sidebar-link {
+    @apply flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 
+           hover:bg-gray-100 hover:text-gray-900 transition-colors;
+  }
+  .sidebar-link-active {
+    @apply sidebar-link bg-gray-900 text-white hover:bg-gray-800 hover:text-white;
+  }
+  .stat-card {
+    @apply bg-white rounded-xl border border-gray-200 p-5;
+  }
+  .section-title {
+    @apply text-lg font-semibold text-gray-900 mb-4;
+  }
+  .page-header {
+    @apply mb-8;
+  }
+  .page-title {
+    @apply text-2xl font-bold text-gray-900;
+  }
+  .page-subtitle {
+    @apply text-sm text-gray-500 mt-1;
+  }
+}
+
+/* React Flow customization — 不覆盖自定义节点的边框色 */
+.react-flow__node {
+  @apply !rounded-xl !shadow-none !border-0 !bg-transparent !p-0;
+}
+.react-flow__edge-path {
+  stroke-width: 2;
+}

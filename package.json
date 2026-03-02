@@ -1,0 +1,50 @@
+{
+  "name": "incremental-map",
+  "version": "1.0.0",
+  "description": "基于增量地图模型（Incremental Map Model）的科学知识管理平台，区分实验基础与理论猜想，确保科学知识的累积性。",
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "keywords": [
+    "incremental-map-model",
+    "scientific-knowledge-management",
+    "cognitive-map",
+    "point-map",
+    "line-map",
+    "error-analysis",
+    "react",
+    "typescript",
+    "indexeddb",
+    "dexie"
+  ],
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.28.0",
+    "dexie": "^4.0.9",
+    "dexie-react-hooks": "^1.1.7",
+    "@xyflow/react": "^12.3.6",
+    "recharts": "^2.13.3",
+    "lucide-react": "^0.460.0",
+    "date-fns": "^4.1.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.16",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.11"
+  }
+}
