@@ -89,7 +89,7 @@ pnpm docker:run
 
 > 若出现 `Resource not accessible by integration`，通常是 token 对 Pages 无权限，或仓库未启用 Pages。请由管理员先完成 Pages 启用，并检查仓库 Actions 权限为可写。
 
----
+如果你不是这个配置，workflow 即使成功，也可能看不到页面更新。
 
 
 ### 常见报错：Resource not accessible by integration
@@ -103,7 +103,9 @@ pnpm docker:run
 
 本仓库 workflow 已处理该场景：当权限不足时会跳过 deploy 并输出指导信息，而不是直接失败。
 
----
+1. **This branch has not been deployed**
+   - 这是正常的：PR 分支默认不会部署生产 Pages。
+   - 只有合并进 `main/master`（或手动触发部署工作流）才会产生正式部署记录。
 
 ## 你截图中问题的直接解释
 
@@ -121,7 +123,9 @@ pnpm docker:run
 
 也就是说，“不能预览”的根因是 **PR 未合并（冲突阻塞）**，不是前端运行失败。
 
----
+### 方式二：纯 Docker
+
+## 解决冲突建议（最短路径）
 
 ## 解决冲突建议（最短路径）
 
