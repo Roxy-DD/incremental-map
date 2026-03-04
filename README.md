@@ -65,7 +65,7 @@ pnpm docker:run
 
 ---
 
-## GitHub Pages 自动部署（已修复）
+## GitHub Pages 自动部署（权限兼容版）
 
 工作流文件：`.github/workflows/gh-pages.yml`
 
@@ -73,7 +73,8 @@ pnpm docker:run
 
 - `pull_request`：只构建，不部署（用于提前发现构建问题）
 - `push(main/master)`：构建并自动部署到 Pages
-- 工作流会在部署阶段执行 `actions/configure-pages@v5`，并使用 `enablement: true` 自动启用 Pages（避免 `Get Pages site failed` 报错）
+- 工作流在部署前会先探测 Pages API 可访问性（HTTP 200 才执行 deploy）。
+- 如果当前 token 无权限或 Pages 未启用，工作流会给出提示并跳过部署，避免红色失败。
 - 构建环境固定为：
   - `VITE_ROUTER_MODE=hash`（避免子路径刷新 404）
   - `VITE_APP_BASE=/${REPO_NAME}/`（资源前缀正确）
@@ -86,9 +87,25 @@ pnpm docker:run
 
 如果你不是这个配置，workflow 即使成功，也可能看不到页面更新。
 
-> 若仓库权限不足（例如没有 Admin 权限），`enablement: true` 仍可能失败，此时需要仓库管理员先在 Pages 页面完成一次启用。
+> 若出现 `Resource not accessible by integration`，通常是 token 对 Pages 无权限，或仓库未启用 Pages。请由管理员先完成 Pages 启用，并检查仓库 Actions 权限为可写。
 
-### 方式一：Docker Compose（推荐）
+如果你不是这个配置，workflow 即使成功，也可能看不到页面更新。
+
+
+### 常见报错：Resource not accessible by integration
+
+这是 GitHub 权限问题，不是前端构建问题。
+
+请确认：
+1. `Settings -> Pages -> Source = GitHub Actions`
+2. `Settings -> Actions -> General -> Workflow permissions = Read and write permissions`
+3. 当前 workflow 运行身份（`GITHUB_TOKEN`）对该仓库有 Pages 访问权限
+
+本仓库 workflow 已处理该场景：当权限不足时会跳过 deploy 并输出指导信息，而不是直接失败。
+
+1. **This branch has not been deployed**
+   - 这是正常的：PR 分支默认不会部署生产 Pages。
+   - 只有合并进 `main/master`（或手动触发部署工作流）才会产生正式部署记录。
 
 ## 你截图中问题的直接解释
 
@@ -107,6 +124,8 @@ pnpm docker:run
 也就是说，“不能预览”的根因是 **PR 未合并（冲突阻塞）**，不是前端运行失败。
 
 ### 方式二：纯 Docker
+
+## 解决冲突建议（最短路径）
 
 ## 解决冲突建议（最短路径）
 
