@@ -24,7 +24,10 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build:gh": "VITE_ROUTER_MODE=hash VITE_APP_BASE=/incremental-map/ pnpm build",
+    "docker:build": "docker build -t incremental-map .",
+    "docker:run": "docker run --rm -p 8080:80 incremental-map"
   },
   "dependencies": {
     "react": "^18.3.1",
