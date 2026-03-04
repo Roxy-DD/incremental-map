@@ -34,9 +34,14 @@ Incremental Map 用于把科学知识拆分为三类可追踪资产：
 - 本地持久化：IndexedDB（Dexie），无需后端
 - 国际化：简体中文 / English
 
----
+- 点图：实验条件、操作步骤、直接结果、误差记录、叠加更新
+- 线图：理论假设、预测、验证方法、状态管理与历史版本
+- 图谱：点图—线图关系可视化
+- 统计：误差分析与贡献评估
+- 本地持久化：IndexedDB（Dexie），无需后端
+- 国际化：简体中文 / English
 
-## 技术栈
+---
 
 - React 18
 - TypeScript 5（strict）
@@ -71,7 +76,7 @@ pnpm build
 pnpm preview
 ```
 
----
+### 常见报错：Resource not accessible by integration
 
 ## Docker 部署
 
