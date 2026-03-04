@@ -21,6 +21,7 @@ import { useLineMaps } from '../hooks/useLineMaps';
 import { useConnections } from '../hooks/useConnections';
 import { Modal, useConfirm } from '../components/Modal';
 import type { PointMap, LineMap, Connection } from '../types';
+import { useI18n } from '../i18n';
 
 /** 点图节点组件 */
 function PointNode({ data }: { data: { label: string; domain: string; errorCount: number } }) {
@@ -139,6 +140,8 @@ function computeLayout(points: PointMap[], lines: LineMap[]) {
 }
 
 export function GraphPage() {
+  const { locale } = useI18n();
+  const isEn = locale === 'en-US';
   const { points } = usePointMaps();
   const { lines } = useLineMaps();
   const { connections, deleteConnection } = useConnections();
@@ -277,10 +280,12 @@ export function GraphPage() {
     <div>
       <div className="page-header">
         <h1 className="page-title flex items-center gap-2">
-          <Network className="w-6 h-6 text-emerald-600" /> 知识图谱
+          <Network className="w-6 h-6 text-emerald-600" /> {isEn ? 'Knowledge Graph' : '知识图谱'}
         </h1>
         <p className="page-subtitle">
-          点图（实验记录）与线图（理论猜想）的关联可视化 — 点击节点查看详情，点击连线管理关系
+          {isEn
+            ? 'Visualize relationships between point maps and line maps. Click nodes/edges for details.'
+            : '点图（实验记录）与线图（理论猜想）的关联可视化 — 点击节点查看详情，点击连线管理关系'}
         </p>
       </div>
 
@@ -304,8 +309,8 @@ export function GraphPage() {
         <div className="bg-white rounded-2xl border border-gray-200 flex items-center justify-center" style={{ height: '65vh' }}>
           <div className="text-center text-gray-400">
             <Network className="w-12 h-12 mx-auto mb-4 opacity-30" />
-            <p className="text-lg font-medium mb-1">暂无知识图谱数据</p>
-            <p className="text-sm">请先添加点图（实验记录）和线图（理论猜想）后，在此查看关联可视化</p>
+            <p className="text-lg font-medium mb-1">{isEn ? 'No graph data yet' : '暂无知识图谱数据'}</p>
+            <p className="text-sm">{isEn ? 'Add point maps and line maps first to view relationships here.' : '请先添加点图（实验记录）和线图（理论猜想）后，在此查看关联可视化'}</p>
           </div>
         </div>
       ) : (

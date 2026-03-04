@@ -7,8 +7,11 @@ import { LineCard } from '../components/LineCard';
 import { Modal, useConfirm } from '../components/Modal';
 import type { LineMap } from '../types';
 import { format } from 'date-fns';
+import { useI18n } from '../i18n';
 
 export function LineMapPage() {
+  const { locale } = useI18n();
+  const isEn = locale === 'en-US';
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const { lines, addLine, updateLine, publishLine, unpublishLine, archiveLine, deleteLine, linkPoint, unlinkPoint } = useLineMaps({
@@ -74,14 +77,14 @@ export function LineMapPage() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="page-title flex items-center gap-2">
-              <GitBranch className="w-6 h-6 text-line-600" /> 线图管理
+              <GitBranch className="w-6 h-6 text-line-600" /> {isEn ? 'Line Map Management' : '线图管理'}
             </h1>
             <p className="page-subtitle">
-              理论猜想的自由空间 — 每位科学家独立维护，版本追踪，归档传承
+              {isEn ? 'A free space for hypotheses with versioning and archival inheritance.' : '理论猜想的自由空间 — 每位科学家独立维护，版本追踪，归档传承'}
             </p>
           </div>
           <button className="btn-line" onClick={() => setShowCreate(true)}>
-            <Plus className="w-4 h-4" /> 新建线图
+            <Plus className="w-4 h-4" /> {isEn ? 'New Line Map' : '新建线图'}
           </button>
         </div>
       </div>
@@ -92,7 +95,7 @@ export function LineMapPage() {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
           <input
             className="input !pl-10"
-            placeholder="搜索理论标题、假设、预测..."
+            placeholder={isEn ? 'Search title, assumptions, predictions...' : '搜索理论标题、假设、预测...'}
             value={search}
             onChange={e => setSearch(e.target.value)}
           />
@@ -102,12 +105,12 @@ export function LineMapPage() {
           value={statusFilter}
           onChange={e => setStatusFilter(e.target.value)}
         >
-          <option value="">全部状态</option>
-          <option value="draft">草稿</option>
-          <option value="published">已发布</option>
-          <option value="archived">已归档</option>
+          <option value="">{isEn ? 'All status' : '全部状态'}</option>
+          <option value="draft">{isEn ? 'Draft' : '草稿'}</option>
+          <option value="published">{isEn ? 'Published' : '已发布'}</option>
+          <option value="archived">{isEn ? 'Archived' : '已归档'}</option>
         </select>
-        <div className="text-sm text-gray-400 ml-auto">{lines.length} 条记录</div>
+        <div className="text-sm text-gray-400 ml-auto">{lines.length} {isEn ? 'records' : '条记录'}</div>
       </div>
 
       {/* 线图列表 */}
@@ -120,8 +123,8 @@ export function LineMapPage() {
       {lines.length === 0 && (
         <div className="text-center py-16 text-gray-400">
           <GitBranch className="w-12 h-12 mx-auto mb-4 opacity-30" />
-          <p className="text-lg font-medium mb-1">暂无线图记录</p>
-          <p className="text-sm">点击"新建线图"添加第一条理论猜想</p>
+          <p className="text-lg font-medium mb-1">{isEn ? 'No line maps yet' : '暂无线图记录'}</p>
+          <p className="text-sm">{isEn ? 'Click "New Line Map" to add your first hypothesis' : '点击"新建线图"添加第一条理论猜想'}</p>
         </div>
       )}
 

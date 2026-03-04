@@ -7,6 +7,7 @@ import { LineCard } from '../components/LineCard';
 import { Modal, useConfirm } from '../components/Modal';
 
 import { format } from 'date-fns';
+import { useI18n } from '../i18n';
 
 /**
  * 归档浏览页面 (Section 4.2.3)
@@ -20,6 +21,8 @@ import { format } from 'date-fns';
  * 6. 版本追踪
  */
 export function ArchivePage() {
+  const { locale } = useI18n();
+  const isEn = locale === 'en-US';
   const { lines, unarchiveLine } = useLineMaps();
   const { points } = usePointMaps();
   const { connections } = useConnections();
@@ -47,10 +50,10 @@ export function ArchivePage() {
     <div>
       <div className="page-header">
         <h1 className="page-title flex items-center gap-2">
-          <Archive className="w-6 h-6 text-amber-600" /> 归档浏览
+          <Archive className="w-6 h-6 text-amber-600" /> {isEn ? 'Archive Browser' : '归档浏览'}
         </h1>
         <p className="page-subtitle">
-          理论猜想的永久存档 — 代际知识传承，确保未验证但有价值的理论不因时间而被遗忘
+          {isEn ? 'Permanent archive for line maps to preserve valuable hypotheses over generations.' : '理论猜想的永久存档 — 代际知识传承，确保未验证但有价值的理论不因时间而被遗忘'}
         </p>
       </div>
 
@@ -80,7 +83,7 @@ export function ArchivePage() {
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
         <input
           className="input !pl-10"
-          placeholder="搜索归档理论..."
+          placeholder={isEn ? 'Search archived theories...' : '搜索归档理论...'}
           value={search}
           onChange={e => setSearch(e.target.value)}
         />
@@ -107,9 +110,9 @@ export function ArchivePage() {
           </div>
         ) : (
           <div className="card text-center text-gray-400 py-12">
-            <Archive className="w-10 h-10 mx-auto mb-3 opacity-30" />
-            <p className="font-medium">暂无归档理论</p>
-            <p className="text-xs mt-1">在线图管理中点击"归档"按钮将理论存入归档</p>
+          <Archive className="w-10 h-10 mx-auto mb-3 opacity-30" />
+            <p className="font-medium">{isEn ? 'No archived theories' : '暂无归档理论'}</p>
+            <p className="text-xs mt-1">{isEn ? 'Archive a published line map from Line Map Management.' : '在线图管理中点击"归档"按钮将理论存入归档'}</p>
           </div>
         )}
       </div>
@@ -117,7 +120,7 @@ export function ArchivePage() {
       {/* 已发布（可归档） */}
       <div>
         <h2 className="section-title flex items-center gap-2">
-          <FileText className="w-4 h-4 text-green-500" /> 已发布理论（可归档） ({publishedLines.length})
+          <FileText className="w-4 h-4 text-green-500" /> {isEn ? 'Published Theories (Archivable)' : '已发布理论（可归档）'} ({publishedLines.length})
         </h2>
         {publishedLines.length > 0 ? (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -126,12 +129,12 @@ export function ArchivePage() {
             ))}
           </div>
         ) : (
-          <div className="card text-center text-gray-400 py-8 text-sm">暂无已发布理论</div>
+          <div className="card text-center text-gray-400 py-8 text-sm">{isEn ? 'No published theories' : '暂无已发布理论'}</div>
         )}
       </div>
 
       {/* 详情 Modal */}
-      <Modal isOpen={!!showDetail} onClose={() => setShowDetailId(null)} title="归档理论详情" size="lg">
+      <Modal isOpen={!!showDetail} onClose={() => setShowDetailId(null)} title={isEn ? 'Archived Theory Details' : '归档理论详情'} size="lg">
         {showDetail && (() => {
           const linkedConns = connections.filter(c => c.targetLineId === showDetail.id);
           const connTypeMap: Record<string, string> = { supports: '支持', contradicts: '矛盾', inspires: '启发', verifies: '验证' };

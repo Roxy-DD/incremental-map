@@ -2,12 +2,12 @@
 
 > 基于 Incremental Map Model 的科学知识管理应用（React + TypeScript + IndexedDB）。
 
-[![Deploy Pages](https://img.shields.io/github/actions/workflow/status/Roxy-DB/incremental-map/gh-pages.yml?branch=main&label=pages&logo=github)](https://github.com/Roxy-DB/incremental-map/actions/workflows/gh-pages.yml)
+[![Deploy Pages](https://img.shields.io/github/actions/workflow/status/Roxy-DD/incremental-map/gh-pages.yml?branch=main&label=pages&logo=github)](https://github.com/Roxy-DD/incremental-map/actions/workflows/gh-pages.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ## 在线预览
 
-- **GitHub Pages（生产预览）**：https://roxy-db.github.io/incremental-map/
+- **GitHub Pages（生产预览）**：https://roxy-dd.github.io/incremental-map/
 
 > 若你是 Fork 仓库，请将预览地址替换为：`https://<你的GitHub用户名>.github.io/incremental-map/`。
 
@@ -34,9 +34,14 @@ Incremental Map 用于把科学知识拆分为三类可追踪资产：
 - 本地持久化：IndexedDB（Dexie），无需后端
 - 国际化：简体中文 / English
 
----
+- 点图：实验条件、操作步骤、直接结果、误差记录、叠加更新
+- 线图：理论假设、预测、验证方法、状态管理与历史版本
+- 图谱：点图—线图关系可视化
+- 统计：误差分析与贡献评估
+- 本地持久化：IndexedDB（Dexie），无需后端
+- 国际化：简体中文 / English
 
-## i18n（国际化）
+---
 
 - React 18
 - TypeScript 5（strict）

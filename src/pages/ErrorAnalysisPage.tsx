@@ -11,6 +11,7 @@ import {
   ERROR_LEVEL_COLORS,
 } from '../hooks/useErrorAnalysis';
 import type { ErrorLevel } from '../types';
+import { useI18n } from '../i18n';
 
 /**
  * 误差分析页面 (Section 3: Multi-level Error Analysis)
@@ -23,6 +24,8 @@ import type { ErrorLevel } from '../types';
  * 5. 认知局限误差 (cognitive) — 最大的误差来源
  */
 export function ErrorAnalysisPage() {
+  const { locale } = useI18n();
+  const isEn = locale === 'en-US';
   const analysis = useErrorAnalysis();
 
   const levelData = Object.entries(analysis.byLevel).map(([level, count]) => ({
@@ -32,9 +35,9 @@ export function ErrorAnalysisPage() {
   }));
 
   const magnitudeData = [
-    { name: '低', value: analysis.byMagnitude.low, fill: '#22c55e' },
-    { name: '中', value: analysis.byMagnitude.medium, fill: '#f59e0b' },
-    { name: '高', value: analysis.byMagnitude.high, fill: '#ef4444' },
+    { name: isEn ? 'Low' : '低', value: analysis.byMagnitude.low, fill: '#22c55e' },
+    { name: isEn ? 'Medium' : '中', value: analysis.byMagnitude.medium, fill: '#f59e0b' },
+    { name: isEn ? 'High' : '高', value: analysis.byMagnitude.high, fill: '#ef4444' },
   ];
 
   const domainRadarData = Object.entries(analysis.byDomain).map(([domain, errors]) => ({
@@ -50,10 +53,10 @@ export function ErrorAnalysisPage() {
     <div>
       <div className="page-header">
         <h1 className="page-title flex items-center gap-2">
-          <AlertTriangle className="w-6 h-6 text-amber-600" /> 多层次误差分析
+          <AlertTriangle className="w-6 h-6 text-amber-600" /> {isEn ? 'Multi-level Error Analysis' : '多层次误差分析'}
         </h1>
         <p className="page-subtitle">
-          从感知局限到认知偏差 — 系统分析科学认知中的多层次误差来源及其累积效应
+          {isEn ? 'Systematic analysis of error sources and cumulative effects in scientific cognition.' : '从感知局限到认知偏差 — 系统分析科学认知中的多层次误差来源及其累积效应'}
         </p>
       </div>
 
@@ -101,7 +104,7 @@ export function ErrorAnalysisPage() {
               <Tooltip
                 contentStyle={{ borderRadius: 8, fontSize: 12, border: '1px solid #e5e7eb' }}
               />
-              <Bar dataKey="count" name="误差数量" radius={[0, 4, 4, 0]}>
+              <Bar dataKey="count" name={isEn ? 'Error count' : '误差数量'} radius={[0, 4, 4, 0]}>
                 {levelData.map((entry, i) => (
                   <Cell key={i} fill={entry.fill} />
                 ))}
@@ -112,7 +115,7 @@ export function ErrorAnalysisPage() {
 
         {/* 严重程度分布 */}
         <div className="card">
-          <h3 className="section-title">严重程度分布</h3>
+          <h3 className="section-title">{isEn ? 'Severity Distribution' : '严重程度分布'}</h3>
           {magnitudeData.some(d => d.value > 0) ? (
           <ResponsiveContainer width="100%" height={280}>
             <PieChart>
@@ -142,7 +145,7 @@ export function ErrorAnalysisPage() {
           </ResponsiveContainer>
           ) : (
           <div className="flex items-center justify-center h-[280px] text-gray-400 text-sm">
-            暂无严重程度数据
+            {isEn ? 'No severity data yet' : '暂无严重程度数据'}
           </div>
           )}
         </div>
@@ -150,7 +153,7 @@ export function ErrorAnalysisPage() {
         {/* 领域雷达图 */}
         {domainRadarData.length > 0 && (
           <div className="card lg:col-span-2">
-            <h3 className="section-title">跨领域误差分布雷达</h3>
+            <h3 className="section-title">{isEn ? 'Cross-domain Error Radar' : '跨领域误差分布雷达'}</h3>
             <ResponsiveContainer width="100%" height={350}>
               <RadarChart data={domainRadarData}>
                 <PolarGrid stroke="#e5e7eb" />
@@ -180,14 +183,14 @@ export function ErrorAnalysisPage() {
       {/* 各实验的误差累积 */}
       {analysis.cumulativeByPoint.length > 0 && (
         <div className="card">
-          <h3 className="section-title">各实验记录的误差累积</h3>
+          <h3 className="section-title">{isEn ? 'Error Accumulation by Experiment' : '各实验记录的误差累积'}</h3>
           <ResponsiveContainer width="100%" height={250}>
             <BarChart data={analysis.cumulativeByPoint} margin={{ bottom: 40 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
               <XAxis dataKey="title" tick={{ fontSize: 10 }} interval={0} />
               <YAxis tick={{ fontSize: 11 }} />
               <Tooltip contentStyle={{ borderRadius: 8, fontSize: 12, border: '1px solid #e5e7eb' }} />
-              <Bar dataKey="errorCount" name="误差数量" fill="#f59e0b" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="errorCount" name={isEn ? 'Error count' : '误差数量'} fill="#f59e0b" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -195,7 +198,9 @@ export function ErrorAnalysisPage() {
 
       {/* 总计 */}
       <div className="mt-6 text-center text-sm text-gray-400">
-        总计分析 {analysis.totalErrors} 条误差记录，覆盖 {Object.keys(analysis.byDomain).length} 个学科领域
+        {isEn
+          ? `Analyzed ${analysis.totalErrors} error records across ${Object.keys(analysis.byDomain).length} domains`
+          : `总计分析 ${analysis.totalErrors} 条误差记录，覆盖 ${Object.keys(analysis.byDomain).length} 个学科领域`}
       </div>
     </div>
   );
