@@ -1,256 +1,172 @@
-# Incremental Map
+# Incremental Map（增量地图）
 
-> 基于增量地图模型（Incremental Map Model）的科学知识管理平台
+基于 Incremental Map Model 的科学知识管理工具（React + TypeScript + IndexedDB）。
 
-区分实验基础与理论猜想，确保科学知识的累积性。
-
----
-
-## 核心理念
-
-本项目实现了一种全新的科学知识管理框架，核心思想来自论文 *"The Incremental Map Model: A New Framework for Scientific Realism Based on Error Cognition"*。
-
-### 三大原则
-
-| 原则 | 说明 |
-|------|------|
-| **点图 (Point Map)** | "眼见为实，实验为真"。坚决放弃归纳，每个实验结果独立记录，概率为 1。 |
-| **线图 (Line Map)** | 科学家的自由空间。每人独立维护理论猜想，权威来自实验数据而非个人。 |
-| **真理叠加态** | 真理不是绝对实体，而是由无数可能真理组成的叠加态，在不同层次有不同精度的近似。 |
-
-### 设计哲学
-
-- **点图不可被线图修改** — 实验记录是客观基础，理论假说不能篡改实验事实
-- **叠加更新** — 新验证叠加在旧记录上，永远保留原始记录
-- **多层次误差分析** — 从感知误差到认知局限，系统化追踪知识传递中的信息损失
-- **双重价值体系** — "谁画了更多的点"而非"谁画了更漂亮的线"
-
----
-
-## 功能特性
-
-### 点图管理（实验记录）
-- 创建、编辑、删除实验记录
-- 完整记录实验条件、环境、操作步骤、直接结果
-- 数学描述支持
-- 多层次误差记录（感知/工具/抽象/传播/认知）
-- 叠加更新历史链
-
-### 线图管理（理论猜想）
-- 创建、编辑理论假设
-- 预测内容与验证方法记录
-- 版本追踪 — 每次修改自动保存快照
-- 状态管理：草稿 → 发布 → 归档
-- 关联/取消关联点图
-
-### 知识图谱
-- 基于 React Flow 的交互式图谱可视化
-- 点图与线图节点以领域分组布局
-- 四种连接类型：支持、矛盾、启发、验证
-- 点击节点/连线查看详情
-- 拖拽布局、缩放、小地图
-
-### 误差分析
-- 五级误差层级分布（柱状图）
-- 严重程度分布（饼图）
-- 跨领域误差雷达图
-- 各实验误差累积分析
-
-### 贡献评估
-- 双重价值体系的研究者排行
-- 点图贡献 vs 线图贡献对比图表
-- 验证率统计
-- 跨领域覆盖分析
-
-### 归档浏览
-- 已归档理论的完整历史
-- 恢复为草稿功能
-- 版本历史查看
-- 关联点图与连接类型展示
-
----
-
-## 技术栈
-
-| 技术 | 用途 |
-|------|------|
-| [React 18](https://react.dev) | UI 框架 |
-| [TypeScript 5](https://www.typescriptlang.org) | 类型安全 |
-| [Vite 5](https://vitejs.dev) | 构建工具与开发服务器 |
-| [Tailwind CSS 3](https://tailwindcss.com) | 样式系统 |
-| [Dexie.js 4](https://dexie.org) | IndexedDB 封装（本地持久化） |
-| [React Flow](https://reactflow.dev) (`@xyflow/react`) | 知识图谱可视化 |
-| [Recharts](https://recharts.org) | 数据图表 |
-| [React Router 6](https://reactrouter.com) | 路由导航 |
-| [Lucide React](https://lucide.dev) | 图标库 |
-| [date-fns](https://date-fns.org) | 日期处理 |
-
-**无后端依赖** — 所有数据存储在浏览器 IndexedDB 中，完全本地运行。
+- **点图（Point Map）**：记录实验事实（概率=1）
+- **线图（Line Map）**：记录理论猜想与迭代
+- **连接关系**：支持 / 矛盾 / 启发 / 验证
+- **误差分析**：感知、工具、抽象、传播、认知
 
 ---
 
 ## 快速开始
 
-### 环境要求
+### 环境
 
-- [Node.js](https://nodejs.org) >= 18
-- [pnpm](https://pnpm.io) >= 8
+- Node.js 18+
+- pnpm 8+
 
-### 安装与运行
+### 本地运行
 
 ```bash
-# 克隆仓库
-git clone https://github.com/<your-username>/incremental-map.git
-cd incremental-map
-
-# 安装依赖
 pnpm install
-
-# 启动开发服务器
 pnpm dev
 ```
 
-浏览器将自动打开 `http://localhost:5173`。首次访问时会自动加载示例数据（经典物理实验）。
+默认地址：`http://localhost:5173`
 
-### 构建生产版本
+### 生产构建
 
 ```bash
-# 类型检查 + 生产构建
 pnpm build
-
-# 预览生产构建
 pnpm preview
 ```
 
 ---
 
+## Docker 部署
+
+### docker compose（推荐）
+
+```bash
+docker compose up -d --build
+```
+
+访问：`http://localhost:8080`
+
+### 单容器命令
+
+```bash
+pnpm docker:build
+pnpm docker:run
+```
+
+> Nginx 已配置 SPA 回退（`try_files ... /index.html`），前端路由刷新不会 404。
+
+---
+
+## i18n（国际化）
+
+当前支持：`简体中文` / `English`
+
+- 语言切换入口：左侧导航栏
+- 持久化位置：`localStorage`
+- key：`incremental-map-locale`
+
+---
+
+## GitHub Pages 自动部署（权限兼容版）
+
+工作流文件：`.github/workflows/gh-pages.yml`
+
+### 当前部署策略
+
+- `pull_request`：只构建，不部署（用于提前发现构建问题）
+- `push(main/master)`：构建并自动部署到 Pages
+- 工作流在部署前会先探测 Pages API 可访问性（HTTP 200 才执行 deploy）。
+- 如果当前 token 无权限或 Pages 未启用，工作流会给出提示并跳过部署，避免红色失败。
+- 构建环境固定为：
+  - `VITE_ROUTER_MODE=hash`（避免子路径刷新 404）
+  - `VITE_APP_BASE=/${REPO_NAME}/`（资源前缀正确）
+
+### 仓库必须配置
+
+进入 GitHub 仓库：`Settings -> Pages`
+
+- Source 选择：**GitHub Actions**
+
+如果你不是这个配置，workflow 即使成功，也可能看不到页面更新。
+
+> 若出现 `Resource not accessible by integration`，通常是 token 对 Pages 无权限，或仓库未启用 Pages。请由管理员先完成 Pages 启用，并检查仓库 Actions 权限为可写。
+
+---
+
+
+### 常见报错：Resource not accessible by integration
+
+这是 GitHub 权限问题，不是前端构建问题。
+
+请确认：
+1. `Settings -> Pages -> Source = GitHub Actions`
+2. `Settings -> Actions -> General -> Workflow permissions = Read and write permissions`
+3. 当前 workflow 运行身份（`GITHUB_TOKEN`）对该仓库有 Pages 访问权限
+
+本仓库 workflow 已处理该场景：当权限不足时会跳过 deploy 并输出指导信息，而不是直接失败。
+
+---
+
+## 你截图中问题的直接解释
+
+截图里的两行信息：
+
+1. **This branch has not been deployed**
+   - 这是正常的：PR 分支默认不会部署生产 Pages。
+   - 只有合并进 `main/master`（或手动触发部署工作流）才会产生正式部署记录。
+
+2. **This branch has conflicts that must be resolved**
+   - 这会阻止合并，所以自然也不会触发主分支部署。
+   - 你图里冲突文件是：
+     - `.github/workflows/gh-pages.yml`
+     - `README.md`
+
+也就是说，“不能预览”的根因是 **PR 未合并（冲突阻塞）**，不是前端运行失败。
+
+---
+
+## 解决冲突建议（最短路径）
+
+在本地执行：
+
+```bash
+git checkout <你的功能分支>
+git fetch origin
+git rebase origin/main
+# 处理冲突后
+pnpm build
+git add .
+git rebase --continue
+git push --force-with-lease
+```
+
+如果默认分支不是 `main`，把 `origin/main` 改成实际默认分支。
+
+---
+
+## 本地模拟 Pages 构建
+
+```bash
+VITE_ROUTER_MODE=hash VITE_APP_BASE=/incremental-map/ pnpm build
+pnpm preview
+```
+
+把 `/incremental-map/` 替换为你的真实仓库名路径。
+
+---
+
 ## 项目结构
 
-```
+```text
 src/
-├── main.tsx                    # 应用入口
-├── App.tsx                     # 路由配置（含 404 兜底）
-├── index.css                   # Tailwind 指令 + 自定义组件类
 ├── components/
-│   ├── Layout.tsx              # 应用外壳（侧边导航 + 内容区）
-│   ├── Modal.tsx               # 模态框 + useConfirm 确认对话
-│   ├── PointCard.tsx           # 点图卡片
-│   ├── LineCard.tsx            # 线图卡片
-│   └── ErrorBadge.tsx          # 误差等级标签
 ├── pages/
-│   ├── DashboardPage.tsx       # 仪表盘概览
-│   ├── PointMapPage.tsx        # 点图管理
-│   ├── LineMapPage.tsx         # 线图管理
-│   ├── GraphPage.tsx           # 知识图谱可视化
-│   ├── ArchivePage.tsx         # 归档浏览
-│   ├── ErrorAnalysisPage.tsx   # 多层次误差分析
-│   └── EvaluationPage.tsx      # 贡献评估
 ├── hooks/
-│   ├── usePointMaps.ts         # 点图数据访问层
-│   ├── useLineMaps.ts          # 线图数据访问层
-│   ├── useConnections.ts       # 连接关系管理
-│   └── useErrorAnalysis.ts     # 误差统计分析
 ├── db/
-│   └── index.ts                # Dexie 数据库定义 + 种子数据
+├── i18n/
 └── types/
-    └── index.ts                # TypeScript 类型定义
 ```
 
 ---
 
-## 数据模型
+## License
 
-### 点图 (PointMap)
-
-实验记录的基础单元，概率为 1 的已验证结果。
-
-| 字段 | 类型 | 说明 |
-|------|------|------|
-| `title` | `string` | 实验标题 |
-| `experimentConditions` | `string` | 实验条件描述 |
-| `environment` | `string` | 实验环境 |
-| `operations` | `string` | 操作步骤 |
-| `directResult` | `string` | 直接的非抽象结果 |
-| `mathematicalDescription` | `string?` | 数学描述 |
-| `errors` | `ErrorRecord[]` | 多层次误差记录 |
-| `overlayHistory` | `OverlayUpdate[]` | 叠加更新链 |
-| `domain` | `string` | 学科领域 |
-| `tags` | `string[]` | 标签 |
-
-### 线图 (LineMap)
-
-理论猜想的自由空间，支持版本追踪。
-
-| 字段 | 类型 | 说明 |
-|------|------|------|
-| `title` | `string` | 理论标题 |
-| `theoreticalAssumptions` | `string` | 理论假设 |
-| `predictions` | `string` | 预测内容 |
-| `verificationMethods` | `string` | 验证方法 |
-| `linkedPointIds` | `string[]` | 关联的点图 |
-| `version` | `number` | 当前版本号 |
-| `versionHistory` | `LineMapVersion[]` | 版本快照 |
-| `status` | `draft \| published \| archived` | 状态 |
-
-### 连接 (Connection)
-
-点图与线图之间的关系。
-
-| 类型 | 说明 |
-|------|------|
-| `supports` | 实验支持理论 |
-| `contradicts` | 实验与理论矛盾 |
-| `inspires` | 实验启发理论 |
-| `verifies` | 实验验证理论 |
-
-### 误差层级 (ErrorLevel)
-
-| 层级 | 说明 |
-|------|------|
-| `perceptual` | 感知误差 — 人类感官的固有误差 |
-| `tool` | 工具测量误差 — 测量仪器引入的误差 |
-| `abstraction` | 理论抽象误差 — 从经验到理论的过程 |
-| `transmission` | 传播误差 — 知识传递中的误差 |
-| `cognitive` | 认知局限误差 — 归纳推理的最大误差来源 |
-
----
-
-## 浏览器兼容性
-
-支持所有现代浏览器（Chrome、Firefox、Safari、Edge）。数据存储于浏览器 IndexedDB，清除浏览器数据将丢失所有记录。
-
----
-
-## 开发指南
-
-### 代码风格
-
-- TypeScript 严格模式，不使用 `as any` / `@ts-ignore`
-- 函数组件 + 命名导出（`export function ComponentName()`）
-- 2 空格缩进、单引号、分号
-- Tailwind CSS 工具类样式
-- 中文注释
-
-### 添加新页面
-
-1. 在 `src/pages/` 创建 `XxxPage.tsx`
-2. 在 `src/App.tsx` 添加路由
-3. 在 `src/components/Layout.tsx` 的 `NAV_ITEMS` 添加导航项
-
-### 添加新数据表
-
-1. 在 `src/types/index.ts` 定义接口
-2. 在 `src/db/index.ts` 的 Dexie 类中添加表定义
-3. 创建 `src/hooks/useXxx.ts` Hook
-
----
-
-## 许可证
-
-[MIT](./LICENSE)
-
----
-
-## 贡献
-
-欢迎贡献！请阅读 [贡献指南](./CONTRIBUTING.md) 了解详情。
+MIT
