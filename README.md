@@ -36,7 +36,7 @@ Incremental Map 用于把科学知识拆分为三类可追踪资产：
 
 ---
 
-## 技术栈
+## i18n（国际化）
 
 - React 18
 - TypeScript 5（strict）
@@ -71,7 +71,7 @@ pnpm build
 pnpm preview
 ```
 
----
+### 常见报错：Resource not accessible by integration
 
 ## Docker 部署
 
