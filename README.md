@@ -1,38 +1,77 @@
 # Incremental Map（增量地图）
 
-基于 Incremental Map Model 的科学知识管理工具（React + TypeScript + IndexedDB）。
+> 基于 Incremental Map Model 的科学知识管理应用（React + TypeScript + IndexedDB）。
 
-- **点图（Point Map）**：记录实验事实（概率=1）
-- **线图（Line Map）**：记录理论猜想与迭代
-- **连接关系**：支持 / 矛盾 / 启发 / 验证
-- **误差分析**：感知、工具、抽象、传播、认知
+[![Deploy Pages](https://img.shields.io/github/actions/workflow/status/Roxy-DB/incremental-map/gh-pages.yml?branch=main&label=pages&logo=github)](https://github.com/Roxy-DB/incremental-map/actions/workflows/gh-pages.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+## 在线预览
+
+- **GitHub Pages（生产预览）**：https://roxy-db.github.io/incremental-map/
+
+> 若你是 Fork 仓库，请将预览地址替换为：`https://<你的GitHub用户名>.github.io/incremental-map/`。
 
 ---
 
-## 快速开始
+## 项目简介
 
-### 环境
+Incremental Map 用于把科学知识拆分为三类可追踪资产：
+
+- **点图（Point Map）**：实验事实，强调客观记录（概率=1）
+- **线图（Line Map）**：理论假设，支持版本演化
+- **连接（Connection）**：支持 / 矛盾 / 启发 / 验证关系
+
+同时提供误差分层分析（感知、工具、抽象、传播、认知）与贡献评估视图。
+
+---
+
+## 功能清单
+
+- 点图：实验条件、操作步骤、直接结果、误差记录、叠加更新
+- 线图：理论假设、预测、验证方法、状态管理与历史版本
+- 图谱：点图—线图关系可视化
+- 统计：误差分析与贡献评估
+- 本地持久化：IndexedDB（Dexie），无需后端
+- 国际化：简体中文 / English
+
+---
+
+## i18n（国际化）
+
+- React 18
+- TypeScript 5（strict）
+- Vite 5
+- Tailwind CSS 3
+- Dexie.js + dexie-react-hooks
+- @xyflow/react / Recharts
+- React Router 6
+
+---
+
+## 本地开发
+
+### 1) 环境要求
 
 - Node.js 18+
 - pnpm 8+
 
-### 本地运行
+### 2) 安装与启动
 
 ```bash
 pnpm install
 pnpm dev
 ```
 
-默认地址：`http://localhost:5173`
+默认访问：`http://localhost:5173`
 
-### 生产构建
+### 3) 生产构建
 
 ```bash
 pnpm build
 pnpm preview
 ```
 
----
+### 常见报错：Resource not accessible by integration
 
 ## Docker 部署
 
@@ -51,109 +90,41 @@ pnpm docker:build
 pnpm docker:run
 ```
 
-> Nginx 已配置 SPA 回退（`try_files ... /index.html`），前端路由刷新不会 404。
+> Nginx 已启用 SPA 回退（`try_files ... /index.html`），刷新路由不会 404。
 
 ---
 
-## i18n（国际化）
-
-当前支持：`简体中文` / `English`
-
-- 语言切换入口：左侧导航栏
-- 持久化位置：`localStorage`
-- key：`incremental-map-locale`
-
----
-
-## GitHub Pages 自动部署（权限兼容版）
+## GitHub Pages 自动部署
 
 工作流文件：`.github/workflows/gh-pages.yml`
 
-### 当前部署策略
+### 触发规则
 
-- `pull_request`：只构建，不部署（用于提前发现构建问题）
-- `push(main/master)`：构建并自动部署到 Pages
-- 工作流在部署前会先探测 Pages API 可访问性（HTTP 200 才执行 deploy）。
-- 如果当前 token 无权限或 Pages 未启用，工作流会给出提示并跳过部署，避免红色失败。
-- 构建环境固定为：
-  - `VITE_ROUTER_MODE=hash`（避免子路径刷新 404）
-  - `VITE_APP_BASE=/${REPO_NAME}/`（资源前缀正确）
+- `pull_request`：构建校验（不发布）
+- `push(main/master)`：构建并发布到 Pages
+- `workflow_dispatch`：手动触发
 
-### 仓库必须配置
+### Pages 构建参数
 
-进入 GitHub 仓库：`Settings -> Pages`
+为保证子路径和路由刷新可用，工作流构建时会注入：
 
-- Source 选择：**GitHub Actions**
+- `VITE_ROUTER_MODE=hash`
+- `VITE_APP_BASE=/${REPO_NAME}/`
 
-如果你不是这个配置，workflow 即使成功，也可能看不到页面更新。
+### 发布后检查
 
-> 若出现 `Resource not accessible by integration`，通常是 token 对 Pages 无权限，或仓库未启用 Pages。请由管理员先完成 Pages 启用，并检查仓库 Actions 权限为可写。
-
-如果你不是这个配置，workflow 即使成功，也可能看不到页面更新。
-
-
-### 常见报错：Resource not accessible by integration
-
-这是 GitHub 权限问题，不是前端构建问题。
-
-请确认：
-1. `Settings -> Pages -> Source = GitHub Actions`
-2. `Settings -> Actions -> General -> Workflow permissions = Read and write permissions`
-3. 当前 workflow 运行身份（`GITHUB_TOKEN`）对该仓库有 Pages 访问权限
-
-本仓库 workflow 已处理该场景：当权限不足时会跳过 deploy 并输出指导信息，而不是直接失败。
-
-1. **This branch has not been deployed**
-   - 这是正常的：PR 分支默认不会部署生产 Pages。
-   - 只有合并进 `main/master`（或手动触发部署工作流）才会产生正式部署记录。
-
-## 你截图中问题的直接解释
-
-截图里的两行信息：
-
-1. **This branch has not been deployed**
-   - 这是正常的：PR 分支默认不会部署生产 Pages。
-   - 只有合并进 `main/master`（或手动触发部署工作流）才会产生正式部署记录。
-
-2. **This branch has conflicts that must be resolved**
-   - 这会阻止合并，所以自然也不会触发主分支部署。
-   - 你图里冲突文件是：
-     - `.github/workflows/gh-pages.yml`
-     - `README.md`
-
-也就是说，“不能预览”的根因是 **PR 未合并（冲突阻塞）**，不是前端运行失败。
-
-### 方式二：纯 Docker
-
-## 解决冲突建议（最短路径）
-
-## 解决冲突建议（最短路径）
-
-在本地执行：
-
-```bash
-git checkout <你的功能分支>
-git fetch origin
-git rebase origin/main
-# 处理冲突后
-pnpm build
-git add .
-git rebase --continue
-git push --force-with-lease
-```
-
-如果默认分支不是 `main`，把 `origin/main` 改成实际默认分支。
+1. 打开 **Actions**，确认 `Build and Deploy Pages` 成功
+2. 打开 **Deployments**，确认 `github-pages` 环境为最新
+3. 访问在线预览链接验证页面与二级路由
 
 ---
 
-## 本地模拟 Pages 构建
+## 国际化（i18n）
 
-```bash
-VITE_ROUTER_MODE=hash VITE_APP_BASE=/incremental-map/ pnpm build
-pnpm preview
-```
-
-把 `/incremental-map/` 替换为你的真实仓库名路径。
+- 语言切换入口：侧边栏
+- 已支持：`zh-CN` / `en-US`
+- 存储位置：`localStorage`
+- Key：`incremental-map-locale`
 
 ---
 
@@ -171,6 +142,6 @@ src/
 
 ---
 
-## License
+## 许可证
 
 MIT
