@@ -3,14 +3,20 @@
 @tailwind utilities;
 
 @layer base {
+  html,
+  body,
+  #root {
+    @apply min-h-screen;
+  }
+
   body {
-    @apply bg-gray-50 text-gray-900 min-h-screen;
+    @apply bg-gray-50 text-gray-900;
   }
 }
 
 @layer components {
   .card {
-    @apply bg-white rounded-xl shadow-sm border border-gray-200 p-5 transition-shadow hover:shadow-md;
+    @apply bg-white rounded-xl shadow-sm border border-gray-200 p-5 transition-all hover:shadow-md;
   }
   .card-point {
     @apply card border-l-4 border-l-point-500;
@@ -19,23 +25,23 @@
     @apply card border-l-4 border-l-line-500;
   }
   .btn-primary {
-    @apply inline-flex items-center gap-2 px-4 py-2 bg-gray-900 text-white rounded-lg 
+    @apply inline-flex items-center gap-2 px-4 py-2 bg-gray-900 text-white rounded-lg
            hover:bg-gray-800 transition-colors text-sm font-medium disabled:opacity-50;
   }
   .btn-secondary {
-    @apply inline-flex items-center gap-2 px-4 py-2 bg-white text-gray-700 border border-gray-300 
+    @apply inline-flex items-center gap-2 px-4 py-2 bg-white text-gray-700 border border-gray-300
            rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium;
   }
   .btn-point {
-    @apply inline-flex items-center gap-2 px-4 py-2 bg-point-600 text-white rounded-lg 
+    @apply inline-flex items-center gap-2 px-4 py-2 bg-point-600 text-white rounded-lg
            hover:bg-point-700 transition-colors text-sm font-medium;
   }
   .btn-line {
-    @apply inline-flex items-center gap-2 px-4 py-2 bg-line-600 text-white rounded-lg 
+    @apply inline-flex items-center gap-2 px-4 py-2 bg-line-600 text-white rounded-lg
            hover:bg-line-700 transition-colors text-sm font-medium;
   }
   .input {
-    @apply w-full px-3 py-2 border border-gray-300 rounded-lg text-sm 
+    @apply w-full px-3 py-2 border border-gray-300 rounded-lg text-sm
            focus:ring-2 focus:ring-point-500 focus:border-point-500 outline-none transition-all;
   }
   .textarea {
@@ -69,7 +75,7 @@
     @apply badge bg-pink-100 text-pink-800;
   }
   .sidebar-link {
-    @apply flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 
+    @apply flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600
            hover:bg-gray-100 hover:text-gray-900 transition-colors;
   }
   .sidebar-link-active {
@@ -92,7 +98,6 @@
   }
 }
 
-/* React Flow customization — 不覆盖自定义节点的边框色 */
 .react-flow__node {
   @apply !rounded-xl !shadow-none !border-0 !bg-transparent !p-0;
 }
