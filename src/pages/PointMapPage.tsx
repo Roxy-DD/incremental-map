@@ -9,8 +9,11 @@ import { Modal, useConfirm } from '../components/Modal';
 import type { PointMap, ErrorLevel, ErrorRecord } from '../types';
 import { generateId } from '../db';
 import { format } from 'date-fns';
+import { useI18n } from '../i18n';
 
 export function PointMapPage() {
+  const { locale } = useI18n();
+  const isEn = locale === 'en-US';
   const [search, setSearch] = useState('');
   const [domainFilter, setDomainFilter] = useState('');
   const { points, addPoint, updatePoint, addOverlay, addError, deleteError, deletePoint } = usePointMaps({
@@ -113,14 +116,16 @@ export function PointMapPage() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="page-title flex items-center gap-2">
-              <MapPin className="w-6 h-6 text-point-600" /> 点图管理
+              <MapPin className="w-6 h-6 text-point-600" /> {isEn ? 'Point Map Management' : '点图管理'}
             </h1>
             <p className="page-subtitle">
-              概率为1的实验记录 — "眼见为实，实验为真"，坚决放弃归纳，独立记录每个实验结果
+              {isEn
+                ? 'Probability-1 experiment records with independent factual logging.'
+                : '概率为1的实验记录 — "眼见为实，实验为真"，坚决放弃归纳，独立记录每个实验结果'}
             </p>
           </div>
           <button className="btn-point" onClick={() => setShowCreate(true)}>
-            <Plus className="w-4 h-4" /> 新建点图
+            <Plus className="w-4 h-4" /> {isEn ? 'New Point Map' : '新建点图'}
           </button>
         </div>
       </div>
@@ -131,7 +136,7 @@ export function PointMapPage() {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
           <input
             className="input !pl-10"
-            placeholder="搜索实验标题、条件、结果..."
+            placeholder={isEn ? 'Search title, conditions, or results...' : '搜索实验标题、条件、结果...'}
             value={search}
             onChange={e => setSearch(e.target.value)}
           />
@@ -141,10 +146,10 @@ export function PointMapPage() {
           value={domainFilter}
           onChange={e => setDomainFilter(e.target.value)}
         >
-          <option value="">全部领域</option>
+          <option value="">{isEn ? 'All domains' : '全部领域'}</option>
           {domains.map(d => <option key={d} value={d}>{d}</option>)}
         </select>
-        <div className="text-sm text-gray-400 ml-auto">{points.length} 条记录</div>
+        <div className="text-sm text-gray-400 ml-auto">{points.length} {isEn ? 'records' : '条记录'}</div>
       </div>
 
       {/* 点图列表 */}
@@ -157,8 +162,8 @@ export function PointMapPage() {
       {points.length === 0 && (
         <div className="text-center py-16 text-gray-400">
           <MapPin className="w-12 h-12 mx-auto mb-4 opacity-30" />
-          <p className="text-lg font-medium mb-1">暂无点图记录</p>
-          <p className="text-sm">点击"新建点图"添加第一条实验记录</p>
+          <p className="text-lg font-medium mb-1">{isEn ? 'No point maps yet' : '暂无点图记录'}</p>
+          <p className="text-sm">{isEn ? 'Click "New Point Map" to add your first experiment record' : '点击"新建点图"添加第一条实验记录'}</p>
         </div>
       )}
 

@@ -6,6 +6,7 @@ import {
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from '../db';
 import type { ContributionEvaluation } from '../types';
+import { useI18n } from '../i18n';
 
 /**
  * 贡献评估页面 (Section 4.3 - 双重价值体系)
@@ -17,6 +18,8 @@ import type { ContributionEvaluation } from '../types';
  * 4. 使价值更权威、更科学、更规范化
  */
 export function EvaluationPage() {
+  const { locale } = useI18n();
+  const isEn = locale === 'en-US';
   const evaluations = useLiveQuery(async () => {
     const points = await db.points.toArray();
     const lines = await db.lines.toArray();
@@ -72,10 +75,12 @@ export function EvaluationPage() {
 
   const chartData = data.map(e => ({
     name: e.scientistName.length > 10 ? e.scientistName.substring(0, 10) + '...' : e.scientistName,
-    点图贡献: e.pointCount,
-    线图贡献: e.lineCount,
-    验证率: e.verifiedPredictionRate,
+    [isEn ? 'Point Contribution' : '点图贡献']: e.pointCount,
+    [isEn ? 'Line Contribution' : '线图贡献']: e.lineCount,
+    [isEn ? 'Verification Rate' : '验证率']: e.verifiedPredictionRate,
   }));
+  const pointContributionKey = isEn ? 'Point Contribution' : '点图贡献';
+  const lineContributionKey = isEn ? 'Line Contribution' : '线图贡献';
 
   // 总体统计
   const totalPoints = data.reduce((s, e) => s + e.pointCount, 0);
@@ -88,10 +93,12 @@ export function EvaluationPage() {
     <div>
       <div className="page-header">
         <h1 className="page-title flex items-center gap-2">
-          <BarChart3 className="w-6 h-6 text-indigo-600" /> 贡献评估
+          <BarChart3 className="w-6 h-6 text-indigo-600" /> {isEn ? 'Contribution Evaluation' : '贡献评估'}
         </h1>
         <p className="page-subtitle">
-          双重价值体系 — 区分实验验证贡献与理论预测贡献，"谁画了更多的点"而非"谁画了更漂亮的线"
+          {isEn
+            ? 'Dual-value system: distinguish verified experimental contribution and theoretical prediction contribution.'
+            : '双重价值体系 — 区分实验验证贡献与理论预测贡献，"谁画了更多的点"而非"谁画了更漂亮的线"'}
         </p>
       </div>
 
@@ -119,26 +126,26 @@ export function EvaluationPage() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         <div className="stat-card text-center">
           <div className="text-3xl font-bold text-gray-900">{data.length}</div>
-          <div className="text-xs text-gray-500 mt-1">研究者总数</div>
+          <div className="text-xs text-gray-500 mt-1">{isEn ? 'Researchers' : '研究者总数'}</div>
         </div>
         <div className="stat-card text-center">
           <div className="text-3xl font-bold text-point-600">{totalPoints}</div>
-          <div className="text-xs text-gray-500 mt-1">总点图贡献</div>
+          <div className="text-xs text-gray-500 mt-1">{isEn ? 'Total Point Contribution' : '总点图贡献'}</div>
         </div>
         <div className="stat-card text-center">
           <div className="text-3xl font-bold text-line-600">{totalLines}</div>
-          <div className="text-xs text-gray-500 mt-1">总线图贡献</div>
+          <div className="text-xs text-gray-500 mt-1">{isEn ? 'Total Line Contribution' : '总线图贡献'}</div>
         </div>
         <div className="stat-card text-center">
           <div className="text-3xl font-bold text-emerald-600">{avgVerificationRate}%</div>
-          <div className="text-xs text-gray-500 mt-1">平均验证率</div>
+          <div className="text-xs text-gray-500 mt-1">{isEn ? 'Average Verification Rate' : '平均验证率'}</div>
         </div>
       </div>
 
       {/* 贡献对比图表 */}
       {chartData.length > 0 && (
         <div className="card mb-8">
-          <h3 className="section-title">研究者贡献对比</h3>
+            <h3 className="section-title">{isEn ? 'Researcher Contribution Comparison' : '研究者贡献对比'}</h3>
           <ResponsiveContainer width="100%" height={320}>
             <BarChart data={chartData} margin={{ bottom: 60 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -149,8 +156,8 @@ export function EvaluationPage() {
                 iconType="circle"
                 formatter={(value) => <span style={{ fontSize: 12, color: '#6b7280' }}>{value}</span>}
               />
-              <Bar dataKey="点图贡献" fill="#3b82f6" radius={[4, 4, 0, 0]} />
-              <Bar dataKey="线图贡献" fill="#a855f7" radius={[4, 4, 0, 0]} />
+              <Bar dataKey={pointContributionKey} fill="#3b82f6" radius={[4, 4, 0, 0]} />
+              <Bar dataKey={lineContributionKey} fill="#a855f7" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -158,7 +165,7 @@ export function EvaluationPage() {
 
       {/* 研究者排行 */}
       <div className="card">
-        <h3 className="section-title">研究者贡献排行</h3>
+        <h3 className="section-title">{isEn ? 'Researcher Ranking' : '研究者贡献排行'}</h3>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
@@ -224,8 +231,8 @@ export function EvaluationPage() {
         {data.length === 0 && (
           <div className="text-center py-12 text-gray-400">
             <BarChart3 className="w-10 h-10 mx-auto mb-3 opacity-30" />
-            <p className="font-medium">暂无贡献数据</p>
-            <p className="text-xs mt-1">添加点图和线图后将自动生成贡献评估</p>
+            <p className="font-medium">{isEn ? 'No contribution data yet' : '暂无贡献数据'}</p>
+            <p className="text-xs mt-1">{isEn ? 'Add point maps and line maps to generate evaluation automatically.' : '添加点图和线图后将自动生成贡献评估'}</p>
           </div>
         )}
       </div>
